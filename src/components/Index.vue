@@ -28,8 +28,8 @@
                 </div>
                 <div class="clear"></div>
                 <div class="config-url">
-                    <a v-if="api_project.projectName" v-bind:href="url+'/'+api_project.name+'/api?group='+group_name">{{url}}/{{api_project.name}}/api?group={{group_name}}</a>
-                    <a v-else v-bind:href="url+'/api?group='+group_name">{{url}}/api?group={{group_name}}</a>
+                    <a v-if="api_project.projectName" v-bind:href="url+'/'+api_project.name+'/api?group='+group_name">{{url}}?group={{group_name}}</a>
+                    <a v-else v-bind:href="url.replace('/'+api_project.name+'/','/')+'?group='+group_name">{{url.replace('/'+api_project.name+'/','/')}}/api?group={{group_name}}</a>
                 </div>
                 <div class="clear"></div>
                 <i class="config-description left">
@@ -213,6 +213,7 @@
                                                             <div v-if="item.underline" class="width-120">
                                                                 {{item.outApiParameter.underlineName}}
                                                             </div>
+
                                                             <div class="padding-left-right-25 "
                                                                  v-if="item.outApiParameter.type===''&& !item.outApiParameter.isArray">
                                                                 <div class="clear"></div>
@@ -261,7 +262,7 @@
         data() {
             return {
                 group_name: "",
-                url: document.location.protocol + "//" + window.location.host,
+                url: document.location.href.substr(0, document.location.href.lastIndexOf('/')),
                 api_project: {},
                 group_names: []
             }
@@ -271,7 +272,7 @@
         },
         methods: {
             apiConfig() {
-                this.axios.get("/api/spaces").then((response) => {
+                this.axios.get(this.url+  "/spaces").then((response) => {
                     this.group_names = response.data;
                     if (response.data.length > 0) {
                         this.group_name = response.data[0];
@@ -283,7 +284,7 @@
                 this.apiProject()
             },
             apiProject() {
-                this.axios.get("/api?group=" + this.group_name).then((response) => {
+                this.axios.get(this.url+ "?group=" + this.group_name).then((response) => {
                     // response.data.classList.forEach((item)=>{
                     //     item.isShow=false;
                     // })
@@ -624,6 +625,11 @@
     .get {
         border-color: rgb(97, 175, 254);
         background-color: rgba(97, 175, 254, 0.1);
+    }
+
+    .put {
+        border-color: rgb(73, 204, 2);
+        background-color: rgba(73, 204, 2, 0.1);
     }
 
     .delete {

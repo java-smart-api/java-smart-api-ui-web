@@ -36,6 +36,7 @@
                         <div class="left">{</div>
                         <div class="left" :class="[{'display':item.open}]">···}</div>
                     </div>
+                    <div v-else><i>{{item.type}}</i></div>
                     <div class="margin-left-10" :class="[{'display':!item.open}]">
                         <div class="clear"></div>
                         <div v-if="item.type===''&&!item.isArray&&item.description">
